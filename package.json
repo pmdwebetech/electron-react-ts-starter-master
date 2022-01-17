@@ -62,8 +62,7 @@
       "assets/icons/*.*",
       "assets/icons/mac/*.*",
       "assets/icons/png/*.*",
-      "assets/icons/win/*.*",
-      "Components/*"
+      "assets/icons/win/*.*"
     ],
     "win": {
       "target": [
