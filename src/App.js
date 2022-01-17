@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -18,7 +19,11 @@ function App() {
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={10}>
       <Grid item xs={4}>
-          <Item><Button variant="outlined">Prints</Button></Item>
+          <Item>
+          <Link className="btn btn-pink" role="button" to="/prints">
+            Prints
+          </Link>
+          </Item>
         </Grid>
         <Grid item xs={4}>
           <Item><Button variant="outlined">Canvases</Button></Item>

@@ -3,10 +3,17 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { HashRouter, Routes, Route } from "react-router-dom";
+import Prints from "./Components/Prints"
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <HashRouter>
+      <Routes>
+        <Route path="/" element={ <App/> } />
+        <Route path="/prints"  element={<Prints/>} />
+      </Routes>
+    </HashRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );
