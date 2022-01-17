@@ -2,9 +2,6 @@
   "name": "fotostore-printlab",
   "description": "Foto Store Printlab Software",
   "author": "Foto Store",
-  "build": {
-    "appId": "ie.fotostore.printlab"
-  },
   "main": "public/electron.js",
   "homepage": "./",
   "version": "0.1.0",
@@ -47,6 +44,48 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "build": {
+    "appId": "ie.fotostore.printlab",
+    "productName": "Electron CircleCI",
+    "copyright": "MIT",
+    "files": [
+      "**/*",
+      "build/Release/*",
+      "assets/icons/*.*",
+      "assets/icons/mac/*.*",
+      "assets/icons/png/*.*",
+      "assets/icons/win/*.*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable"
+        }
+      ],
+      "icon": "assets/icons/win/icon.ico"
+    },
+    "nsis": {
+      "runAfterFinish": true,
+      "installerIcon": "assets/icons/win/icon.ico",
+      "artifactName": "electron-circleci-${version}.${ext}"
+    },
+    "portable": {
+      "artifactName": "electron-circleci.exe"
+    },
+    "appx": {
+      "applicationId": "electron.circleci",
+      "backgroundColor": "#464646",
+      "identityName": "electron.circleci",
+      "publisherDisplayName": "joeireland",
+      "artifactName": "electron-circleci-${version}.${ext}"
+    }
   },
   "devDependencies": {
     "concurrently": "^7.0.0",
