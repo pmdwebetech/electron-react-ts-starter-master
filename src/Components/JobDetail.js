@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Container, Grid, Button} from '@mui/material';
-import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
+import { DataGrid }  from '@mui/x-data-grid';
 import {ProductCategory} from '../Enums/ProductCategory';
 import LocalPrintshopOutlinedIcon from '@mui/icons-material/LocalPrintshopOutlined';
 import isElectron from 'is-electron';

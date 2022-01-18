@@ -7,22 +7,15 @@ import MaterialTable from 'material-table';
 import LocalPrintshopOutlinedIcon from '@mui/icons-material/LocalPrintshopOutlined';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import JobDetail from './JobDetail';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
 
 function SimpleDialog(props) {
     const { onClose, selectedValue, open, jobId } = props;
-    
+
     const handleClose = () => {
       onClose(selectedValue);
     };
   
-    const handleListItemClick = (value) => {
-      onClose(value);
-    };
 
-    const theme = useTheme();
-    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   
     return (
       <Dialog onClose={handleClose} open={open} fullWidth="true" maxWidth="sm">
