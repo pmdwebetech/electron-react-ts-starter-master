@@ -50,7 +50,8 @@ function Prints() {
       options={{
         rowStyle: {
           fontSize: 12,
-        }
+        },
+        actionsColumnIndex: -1
       }}
       columns={[
 
@@ -72,9 +73,6 @@ function Prints() {
           disabled: rowData.birthYear < 2000
         })
       ]}
-      options={{
-        actionsColumnIndex: -1
-      }}
       data={query =>
         new Promise((resolve, reject) => {
           let url = 'https://admin.fotostore.ie/api/admin/print-jobs?'
