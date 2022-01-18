@@ -3,9 +3,21 @@ const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const path = require("path");
 const isDev = require("electron-is-dev");
+const { ipcMain } = require('electron'); 
+const { PRINT_LABEL_NEEDED } = require('../src/actions/types')
+
+
 let mainWindow;
 function createWindow() {
-    mainWindow = new BrowserWindow({ width: 900, height: 680 });
+    mainWindow = new BrowserWindow({ 
+        width: 900, 
+        height: 680,
+        webPreferences: {
+            nodeIntegration: false,
+            contextIsolation: false,
+            preload: __dirname + '/preload.js'
+          }
+    });
     mainWindow.loadURL(
         isDev
             ? "http://localhost:3000"
@@ -24,3 +36,7 @@ app.on("activate", () => {
         createWindow();
     }
 });
+
+ipcMain.on(PRINT_LABEL_NEEDED, (event , data) => {
+    console.log("PRINT_LABEL_NEEDED");
+})
