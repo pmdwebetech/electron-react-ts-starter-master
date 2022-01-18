@@ -42,23 +42,29 @@ app.on("activate", () => {
     }
 });
 
-ipcMain.on(PRINT_LABEL_NEEDED, async (event , data) => {
+ipcMain.on(PRINT_LABEL_NEEDED, (event , data) => {
     log.info("PRINT_LABEL_NEEDED");
+
+    var filePath = __dirname + '/tmp/image.png';
+
+    log.info(filePath);
 
     if (!fs.existsSync(__dirname + '/tmp')) {
         log.info("Directory does not exists.");
 
-        fs.mkdir(__dirname + '/tmp', async function (err) {
+        fs.mkdir(__dirname + '/tmp', function (err) {
         if (err) {
             log.error(err.message);
             dialog.showErrorBox('Failed to create directory\n', err.message);
         } else {
             log.info("Calling htmtl-to-image.");
-            const x = await nodeHtmlToImage({
-                //output: __dirname + '/tmp/image.png',
+            nodeHtmlToImage({
+                output: filePath,
                 html: '<html><body>Hello world!</body></html>'
-              });
-            // .then((a, b) => console.log('The image was created successfully!'));
+              }).then((a, b) => {
+                log.info('The image was created successfully!');
+                print(filePath);
+            });
     
             print(x);
         }
@@ -68,13 +74,13 @@ ipcMain.on(PRINT_LABEL_NEEDED, async (event , data) => {
         log.info("Calling htmtl-to-image.");
         try
         {
-            const x = await nodeHtmlToImage({
-                //output: __dirname + '/tmp/image.png',
+            nodeHtmlToImage({
+                output: filePath,
                 html: '<html><body>Hello world!</body></html>'
+            }).then((a, b) => {
+                log.info('The image was created successfully!');
+                print(filePath);
             });
-            // .then((a, b) => console.log('The image was created successfully!'));
-
-            print(x);
 
             var d = "";
         }
@@ -86,32 +92,24 @@ ipcMain.on(PRINT_LABEL_NEEDED, async (event , data) => {
     
 });
 
-function print(text){
+function print(file){
     log.info("Calling print.");
     let win = new BrowserWindow({show: false})
-    fs.writeFile(path.join(__dirname,'print.png'), text, function (err) {
-        if(err){
-            log.error(err.message);
-            dialog.showErrorBox('Failed to print\n', err.message);
-        }
-        else{
-            log.error("loading file to print");
-            win.loadURL('file://'+__dirname+'/print.png')
-            win.webContents.on('did-finish-load', () => {
-                win.webContents.print({silent:true}, function (success,failure) {
-                    if(!success){
-                        log.error(failure);
-                        dialog.showErrorBox('Failed to print\n', failure);
-                    }
-                    else{
-                        log.info("Sent to printer");
-                    }
-                })
-                // setTimeout(function(){
-                //     win.close();
-                // }, 1000);
-            })
-        }
-    })
+    log.error("loading file to print");
+    win.loadURL("file://" + file)
+    win.webContents.on('did-finish-load', () => {
+        win.webContents.print({silent:true}, function (success,failure) {
+            if(!success){
+                log.error(failure);
+                dialog.showErrorBox('Failed to print\n', failure);
+            }
+            else{
+                log.info("Sent to printer");
+            }
+        })
+        // setTimeout(function(){
+        //     win.close();
+        // }, 1000);
+    });
     
   }
