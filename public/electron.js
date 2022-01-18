@@ -66,15 +66,21 @@ ipcMain.on(PRINT_LABEL_NEEDED, async (event , data) => {
     }
     else{
         log.info("Calling htmtl-to-image.");
-        const x = await nodeHtmlToImage({
-            //output: __dirname + '/tmp/image.png',
-            html: '<html><body>Hello world!</body></html>'
-          });
-        // .then((a, b) => console.log('The image was created successfully!'));
+        try
+        {
+            const x = await nodeHtmlToImage({
+                //output: __dirname + '/tmp/image.png',
+                html: '<html><body>Hello world!</body></html>'
+            });
+            // .then((a, b) => console.log('The image was created successfully!'));
 
-        print(x);
+            print(x);
 
-        var d = "";
+            var d = "";
+        }
+        catch(error){
+            log.error(error);
+        }
     }
 
     
