@@ -7,7 +7,8 @@ const { ipcMain } = require('electron');
 const { PRINT_LABEL_NEEDED } = require('../src/actions/types')
 const nodeHtmlToImage = require('node-html-to-image')
 const fs = require('fs');
-const { dialog } = require('electron')
+const { dialog } = require('electron');
+const log = require('electron-log');
 
 
 
@@ -42,22 +43,29 @@ app.on("activate", () => {
 });
 
 ipcMain.on(PRINT_LABEL_NEEDED, async (event , data) => {
-    console.log("PRINT_LABEL_NEEDED");
+    log.info("PRINT_LABEL_NEEDED");
 
     if (!fs.existsSync(__dirname + '/tmp')) {
-        fs.mkdir(__dirname + '/tmp', function (err) {
+        log.info("Directory does not exists.");
+
+        fs.mkdir(__dirname + '/tmp', async function (err) {
         if (err) {
+            log.error(err.message);
             dialog.showErrorBox('Failed to create directory\n', err.message);
         } else {
-            nodeHtmlToImage({
-                output: __dirname + '/tmp/image.png',
+            log.info("Calling htmtl-to-image.");
+            const x = await nodeHtmlToImage({
+                //output: __dirname + '/tmp/image.png',
                 html: '<html><body>Hello world!</body></html>'
-              })
-            .then((a, b) => console.log('The image was created successfully!'));
+              });
+            // .then((a, b) => console.log('The image was created successfully!'));
+    
+            print(x);
         }
         });
     }
     else{
+        log.info("Calling htmtl-to-image.");
         const x = await nodeHtmlToImage({
             //output: __dirname + '/tmp/image.png',
             html: '<html><body>Hello world!</body></html>'
@@ -73,17 +81,24 @@ ipcMain.on(PRINT_LABEL_NEEDED, async (event , data) => {
 });
 
 function print(text){
+    log.info("Calling print.");
     let win = new BrowserWindow({show: false})
     fs.writeFile(path.join(__dirname,'print.png'), text, function (err) {
         if(err){
+            log.error(err.message);
             dialog.showErrorBox('Failed to print\n', err.message);
         }
         else{
+            log.error("loading file to print");
             win.loadURL('file://'+__dirname+'/print.png')
             win.webContents.on('did-finish-load', () => {
                 win.webContents.print({silent:true}, function (success,failure) {
                     if(!success){
+                        log.error(failure);
                         dialog.showErrorBox('Failed to print\n', failure);
+                    }
+                    else{
+                        log.info("Sent to printer");
                     }
                 })
                 // setTimeout(function(){
