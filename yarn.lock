@@ -6157,6 +6157,11 @@
     "relateurl" "^0.2.7"
     "terser" "^5.10.0"
 
+"html-to-image@^1.9.0":
+  "integrity" "sha512-9gaDCIYg62Ek07F2pBk76AHgYZ2gxq2YALU7rK3gNCqXuhu6cWzsOQqM7qGbjZiOzxGzrU1deDqZpAod2NEwbA=="
+  "resolved" "https://registry.npmjs.org/html-to-image/-/html-to-image-1.9.0.tgz"
+  "version" "1.9.0"
+
 "html-webpack-plugin@^5.5.0":
   "integrity" "sha512-sy88PC2cRTVxvETRgUHFrL4No3UxvcH8G1NepGhqaTT+GXN2kTamqasot0inS5hXeg1cMbFDt27zzo9p35lZVw=="
   "resolved" "https://registry.npmjs.org/html-webpack-plugin/-/html-webpack-plugin-5.5.0.tgz"
@@ -11550,6 +11555,11 @@
   "version" "3.1.0"
   dependencies:
     "string-width" "^4.0.0"
+
+"wkhtmltoimage@^0.1.5":
+  "integrity" "sha1-gXcNuCtOR9f2YRnKm21AXTj9bNc="
+  "resolved" "https://registry.npmjs.org/wkhtmltoimage/-/wkhtmltoimage-0.1.5.tgz"
+  "version" "0.1.5"
 
 "word-wrap@^1.2.3", "word-wrap@~1.2.3":
   "integrity" "sha512-Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ=="

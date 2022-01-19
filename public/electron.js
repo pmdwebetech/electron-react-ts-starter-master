@@ -9,6 +9,7 @@ const nodeHtmlToImage = require('node-html-to-image')
 const fs = require('fs');
 const { dialog } = require('electron');
 const log = require('electron-log');
+var wkhtmltoimage = require('wkhtmltoimage');
 
 
 
@@ -47,57 +48,79 @@ ipcMain.on(PRINT_LABEL_NEEDED, (event , data) => {
 
     var filePath = path.join(app.getPath("temp"), "image.png");
 
-    log.info(filePath);
+    wkhtmltoimage.generate('<html><body>Hello world!</body></html>')
+        .pipe(fs.createWriteStream(filePath));
 
-    if (!fs.existsSync(app.getPath("temp"))) {
-        log.info("Directory does not exists.");
+    //var node = htmlToElement("<html><body>Hello world!</body></html>");
 
-        fs.mkdir(app.getPath("temp"), function (err) {
-        if (err) {
-            log.error(err.message);
-            dialog.showErrorBox('Failed to create directory\n', err.message);
-        } else {
-            log.info("Calling htmtl-to-image.");
-            nodeHtmlToImage({
-                output: filePath,
-                html: '<html><body>Hello world!</body></html>'
-              }).then((a, b) => {
-                log.info('The image was created successfully!');
-                print(filePath);
-            });
+    // htmlToImage.toPng("<html><body>Hello world!</body></html>")
+    // .then(function (dataUrl) {
+    //     var img = new Image();
+    //     img.src = dataUrl;
+    //     //document.body.appendChild(img);
+    // })
+    // .catch(function (error) {
+    //     console.error('oops, something went wrong!', error);
+    // });
+
+    // log.info(filePath);
+
+    // if (!fs.existsSync(app.getPath("temp"))) {
+    //     log.info("Directory does not exists.");
+
+    //     fs.mkdir(app.getPath("temp"), function (err) {
+    //     if (err) {
+    //         log.error(err.message);
+    //         dialog.showErrorBox('Failed to create directory\n', err.message);
+    //     } else {
+    //         log.info("Calling htmtl-to-image.");
+    //         nodeHtmlToImage({
+    //             output: filePath,
+    //             html: '<html><body>Hello world!</body></html>'
+    //           }).then((a, b) => {
+    //             log.info('The image was created successfully!');
+    //             print(filePath);
+    //         });
     
-            print(x);
-        }
-        });
-    }
-    else{
-        log.info("Calling htmtl-to-image.");
-        try
-        {
-            nodeHtmlToImage({
-                output: filePath,
-                html: '<html><body>Hello world!</body></html>'
-            }).then((a, b) => {
-                log.info('The image was created successfully!');
-                print(filePath);
-            });
+    //         print(x);
+    //     }
+    //     });
+    // }
+    // else{
+    //     log.info("Calling htmtl-to-image.");
+    //     try
+    //     {
+    //         nodeHtmlToImage({
+    //             output: filePath,
+    //             html: '<html><body>Hello world!</body></html>'
+    //         }).then((a, b) => {
+    //             log.info('The image was created successfully!');
+    //             print(filePath);
+    //         });
 
-            var d = "";
-        }
-        catch(error){
-            log.error(error);
-        }
-    }
+    //         var d = "";
+    //     }
+    //     catch(error){
+    //         log.error(error);
+    //     }
+    // }
 
     
 });
+
+function htmlToElement(html) {
+    var template = document.createElement('template');
+    html = html.trim(); // Never return a text node of whitespace as the result
+    template.innerHTML = html;
+    return template.content.firstChild;
+}
 
 function print(file){
     log.info("Calling print.");
     let win = new BrowserWindow({show: false})
     log.error("loading file to print");
     win.loadURL("file://" + file)
-    win.webContents.on('did-finish-load', () => {
+    win.webContents.devToolsWebContents.on('did-finish-load', () => {
         win.webContents.print({silent:true}, function (success,failure) {
             if(!success){
                 log.error(failure);
