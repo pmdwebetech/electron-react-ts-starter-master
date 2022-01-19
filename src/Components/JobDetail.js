@@ -7,11 +7,12 @@ import isElectron from 'is-electron';
 const { PRINT_LABEL_NEEDED } = require('../actions/types');
 
 
+
 class JobDetail extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        error: null,
+        error: null,  
         isLoaded: false,
         jobId : props.jobId,
         data: null,
@@ -115,7 +116,7 @@ class JobDetail extends React.Component {
 
       function printLabel(e) {
         if(isElectron()){
-          window.ipcRenderer.send(PRINT_LABEL_NEEDED , 'Create new document');
+          window.ipcRenderer.send(PRINT_LABEL_NEEDED , data);
         }
         
       }
