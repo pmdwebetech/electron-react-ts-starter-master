@@ -48,64 +48,13 @@ ipcMain.on(PRINT_LABEL_NEEDED, (event , data) => {
 
     var filePath = path.join(app.getPath("temp"), "image.png");
 
-    wkhtmltoimage.generate('<html><body>Hello world!</body></html>')
-        .pipe(fs.createWriteStream(filePath));
+    var stream = wkhtmltoimage.generate('<html><body>Hello world!</body></html>')
+                    .pipe(fs.createWriteStream(filePath));
 
-    //var node = htmlToElement("<html><body>Hello world!</body></html>");
+    stream.on('finish', function () {
+        print(filePath);
+    });
 
-    // htmlToImage.toPng("<html><body>Hello world!</body></html>")
-    // .then(function (dataUrl) {
-    //     var img = new Image();
-    //     img.src = dataUrl;
-    //     //document.body.appendChild(img);
-    // })
-    // .catch(function (error) {
-    //     console.error('oops, something went wrong!', error);
-    // });
-
-    // log.info(filePath);
-
-    // if (!fs.existsSync(app.getPath("temp"))) {
-    //     log.info("Directory does not exists.");
-
-    //     fs.mkdir(app.getPath("temp"), function (err) {
-    //     if (err) {
-    //         log.error(err.message);
-    //         dialog.showErrorBox('Failed to create directory\n', err.message);
-    //     } else {
-    //         log.info("Calling htmtl-to-image.");
-    //         nodeHtmlToImage({
-    //             output: filePath,
-    //             html: '<html><body>Hello world!</body></html>'
-    //           }).then((a, b) => {
-    //             log.info('The image was created successfully!');
-    //             print(filePath);
-    //         });
-    
-    //         print(x);
-    //     }
-    //     });
-    // }
-    // else{
-    //     log.info("Calling htmtl-to-image.");
-    //     try
-    //     {
-    //         nodeHtmlToImage({
-    //             output: filePath,
-    //             html: '<html><body>Hello world!</body></html>'
-    //         }).then((a, b) => {
-    //             log.info('The image was created successfully!');
-    //             print(filePath);
-    //         });
-
-    //         var d = "";
-    //     }
-    //     catch(error){
-    //         log.error(error);
-    //     }
-    // }
-
-    
 });
 
 function htmlToElement(html) {
@@ -120,7 +69,7 @@ function print(file){
     let win = new BrowserWindow({show: false})
     log.error("loading file to print");
     win.loadURL("file://" + file)
-    win.webContents.devToolsWebContents.on('did-finish-load', () => {
+    win.webContents.on('did-finish-load', () => {
         win.webContents.print({silent:true}, function (success,failure) {
             if(!success){
                 log.error(failure);
