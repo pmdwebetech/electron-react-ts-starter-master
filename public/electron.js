@@ -45,14 +45,14 @@ app.on("activate", () => {
 ipcMain.on(PRINT_LABEL_NEEDED, (event , data) => {
     log.info("PRINT_LABEL_NEEDED");
 
-    var filePath = __dirname + '/tmp/image.png';
+    var filePath = path.join(app.getPath("temp"), "image.png");
 
     log.info(filePath);
 
-    if (!fs.existsSync(__dirname + '/tmp')) {
+    if (!fs.existsSync(app.getPath("temp"))) {
         log.info("Directory does not exists.");
 
-        fs.mkdir(__dirname + '/tmp', function (err) {
+        fs.mkdir(app.getPath("temp"), function (err) {
         if (err) {
             log.error(err.message);
             dialog.showErrorBox('Failed to create directory\n', err.message);
